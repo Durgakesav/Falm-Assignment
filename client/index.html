@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Collaborative Canvas</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <h2>Users</h2>
+        <ul id="users"></ul>
+        <div class="tools">
+          <h3>Tools</h3>
+          <div class="tool-row">
+            <button id="tool-brush" class="tool active">Brush</button>
+            <button id="tool-eraser" class="tool">Eraser</button>
+            <button id="tool-rect" class="tool">Rect</button>
+            <button id="tool-line" class="tool">Line</button>
+            <button id="tool-ellipse" class="tool">Ellipse</button>
+          </div>
+          <div class="tool-row">
+            <label>Color</label>
+            <input id="color" type="color" value="#3949ab" />
+          </div>
+          <div class="tool-row">
+            <label>Width</label>
+            <input id="width" type="range" min="1" max="40" value="4" />
+          </div>
+          <div class="tool-row">
+            <button id="undo">Undo</button>
+            <button id="redo">Redo</button>
+          </div>
+          <div class="tool-row">
+            <button id="save">Save</button>
+            <button id="load">Load</button>
+            <input id="load-file" type="file" accept="application/json" style="display:none" />
+          </div>
+          <div class="tool-row small">
+            <span id="fps">FPS: -</span>
+            <span id="latency">RTT: -</span>
+          </div>
+        </div>
+      </aside>
+      <main class="stage">
+        <canvas id="canvas"></canvas>
+      </main>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/canvas.js"></script>
+    <script src="/websocket.js"></script>
+    <script src="/main.js"></script>
+  </body>
+  </html>
+
+

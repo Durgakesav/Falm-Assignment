@@ -1,0 +1,75 @@
+# Architecture
+
+## Data Flow
+
+1. User input (pointer down/move/up) generates stroke lifecycle events
+2. Client streams events to server via WebSocket:
+   - `stroke:start` (tool, color, width, first point)
+   - `stroke:point` (subsequent points)
+   - `stroke:end` (commit)
+3. Server relays live `stroke:start`/`stroke:point` to others for immediate rendering (client-side prediction)
+4. On `stroke:end`, server commits the stroke into the room operation log and broadcasts `op:commit`
+5. Clients add operation to local list; on undo/redo server emits `op:revert` / `op:commit`
+
+```
+Client ── stroke:start/point/end ──> Server ── broadcast live ──> Clients (render live)
+Client <────────── op:commit / op:revert ───────────── Server (authoritative op log)
+```
+
+## WebSocket Protocol
+
+- Client → Server
+  - `cursor` { x, y }
+  - `stroke:start` { x, y, tool, color, width }
+  - `stroke:point` { x, y }
+  - `stroke:end`
+  - `tool:update` { tool?, color?, width? }
+  - `op:undo`
+  - `op:redo`
+
+- Server → Client
+  - `init` { roomId, you, users, ops, active }
+  - `users:list` [ { userId, name, color, width, tool } ]
+  - `user:joined` { user }
+  - `user:left` { userId }
+  - `cursor` { userId, x, y }
+  - `stroke:start` { userId, x, y, width, color, mode }
+  - `stroke:point` { userId, x, y }
+  - `op:commit` { id, type, mode, color, width, userId, points[], ts, seq }
+  - `op:revert` { type: 'revert', opId, seq }
+
+## Undo/Redo Strategy (Global)
+
+- Server maintains a strictly ordered operation log (sequence `seq`) of committed strokes
+- Undo removes the most recent committed operation (regardless of author) and broadcasts `op:revert`
+- Redo re-applies the last undone operation and broadcasts `op:commit`
+- Any new committed stroke clears the redo stack
+- Consistency via server order: all clients converge by replaying operations in the same order
+
+## Conflict Resolution
+
+- Overlapping drawings are resolved visually:
+  - Draw uses `source-over`, eraser uses `destination-out`
+  - Later operations win; order defined by server sequence
+- Concurrent in-progress strokes are streamed live; final commit order comes from server
+
+## Performance Decisions
+
+- Client throttles high-frequency point sends (≈12ms) to balance smoothness and bandwidth
+- Quadratic curve smoothing of segments with minimal lookback for efficient rendering
+- Retained vector op list on client for redraw; full replay on resize
+- Cursor updates throttled with drawing points to reduce network chatter
+
+## Room Management
+
+- Default room `lobby`; optional `?room=foo` creates/joins room
+- Each room tracks users, active strokes, and committed operation log
+
+## Future Improvements
+
+- Offscreen canvas and tile-based redraw
+- Server-side snapshotting and persistence (Redis/S3)
+- CRDT-based vector model for fine-grained undo/redo per path segment
+- Pressure/tilt support via Pointer Events
+
+

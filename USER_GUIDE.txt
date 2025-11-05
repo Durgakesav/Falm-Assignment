@@ -1,0 +1,61 @@
+# Collaborative Canvas – User Guide
+
+## Getting Started
+
+1. In terminal:
+   - `npm install`
+   - `npm start`
+2. Open your browser at `http://localhost:3000`
+3. To test with multiple users, open a second tab/window to the same URL.
+4. Optional rooms: add `?room=any-name`, e.g. `http://localhost:3000?room=demo`
+
+## Drawing Tools
+
+- Brush: click “Brush”, then click and drag on the canvas to draw.
+- Eraser: click “Eraser” to erase existing pixels (uses the width slider size).
+- Rectangle: click “Rect”, then click-drag to size; release to commit the rectangle.
+- Color: choose a color; applies to Brush and Rect.
+- Width: set stroke thickness (also eraser/rect border thickness).
+
+## Collaboration
+
+- Live cursors: see other users’ cursors move around the canvas.
+- Real-time strokes: drawings stream while users draw (no waiting for finish).
+- User list: shows who’s online, their color, tool, and width.
+
+## Undo / Redo (Global)
+
+- Buttons: click “Undo” and “Redo”.
+- Shortcuts:
+  - Undo: Ctrl/Cmd + Z
+  - Redo: Ctrl/Cmd + Shift + Z or Ctrl/Cmd + Y
+- Global behavior: affects the entire room for all users.
+
+## Save / Load Sessions
+
+- Save: click “Save” to download a JSON file of the current session.
+- Load: click “Load” and choose a previously saved JSON to replace the room state (everyone in the room sees it).
+
+## Tips
+
+- Use rooms to separate groups or activities.
+- Resize window to fit your screen; the canvas replays content automatically.
+- If lines look jagged, slow down pointer movement slightly; the app smooths paths with curves.
+
+## Troubleshooting
+
+- Nothing happens when drawing:
+  - Reload the page (Ctrl+R).
+  - Ensure the server is running (terminal shows “Server listening on http://localhost:3000”).
+- No real-time updates:
+  - Open `http://localhost:3000/socket.io/socket.io.js` in the browser; it should load.
+  - Check VPN/firewall settings.
+- High latency or choppiness:
+  - Close heavy tabs/apps; keep only needed tabs open.
+  - Try a different browser.
+
+## Supported Browsers
+
+- Latest Chrome, Edge, Firefox, and Safari.
+
+

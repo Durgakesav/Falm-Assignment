@@ -1,0 +1,28 @@
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+.app { display: flex; height: 100%; }
+.sidebar { width: 260px; padding: 12px; border-right: 1px solid #e0e0e0; background: #fafafa; display: flex; flex-direction: column; gap: 12px; }
+.sidebar h2 { margin: 0; font-size: 18px; }
+.sidebar h3 { margin: 8px 0 0 0; font-size: 14px; }
+#users { list-style: none; margin: 0; padding: 0; max-height: 30vh; overflow: auto; }
+#users li { display: flex; gap: 8px; align-items: center; padding: 4px 0; font-size: 13px; }
+#users .swatch { width: 12px; height: 12px; border-radius: 2px; border: 1px solid #cfd8dc; }
+.tools { border-top: 1px solid #eee; padding-top: 8px; }
+.tool-row { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
+.tool-row.small { justify-content: space-between; font-size: 12px; color: #616161; }
+.tool { padding: 6px 10px; border: 1px solid #cfd8dc; background: #fff; border-radius: 6px; cursor: pointer; }
+.tool.active { background: #e3f2fd; border-color: #90caf9; }
+
+.stage { flex: 1; position: relative; background: #fff; }
+#canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* Cursor indicators */
+.cursor {
+  position: absolute;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 2px solid rgba(0,0,0,0.2);
+}
+
+
